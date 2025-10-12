@@ -1,6 +1,7 @@
 package com.github.sor2171.dices.ui.component
 
 
+import androidx.annotation.StringRes
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -11,7 +12,7 @@ import androidx.compose.ui.res.stringResource
 @Composable
 fun ScreenJumpButton(
     modifier: Modifier,
-    textID: Int
+    @StringRes textID: Int
 ) {
     Button(
         onClick = {},

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Dices</string>
+    <string name="SIButton_name">统计信息</string>
+    <string name="MDButton_name">管理骰子</string>
+</resources>

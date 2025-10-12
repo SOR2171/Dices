@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Dices</string>
+    <string name="SIButton_name">Statistical information</string>
+    <string name="MDButton_name">Manage dice</string>
 </resources>

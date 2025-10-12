@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -14,7 +15,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.github.sor2171.dices.ui.component.TextButton
+import com.github.sor2171.dices.ui.component.DiceValueGrid
+import com.github.sor2171.dices.ui.component.ScreenJumpButton
 import com.github.sor2171.dices.ui.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
@@ -32,27 +34,34 @@ fun MainFunc() {
     AppTheme(
         dynamicColor = false
     ) {
-        Surface(tonalElevation = 5.dp) {
+        Surface(tonalElevation = 3.dp) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                TextButton(
+                ScreenJumpButton(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .height(72.dp)
                         .padding(vertical = 12.dp),
                     textID = R.string.SIButton_name
                 )
 
-                TextButton(
+                ScreenJumpButton(
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .height(72.dp)
+                        .padding(vertical = 12.dp),
                     textID = R.string.MDButton_name
                 )
+
             }
         }
+        DiceValueGrid(
+            modifier = Modifier
+        )
     }
 }
 

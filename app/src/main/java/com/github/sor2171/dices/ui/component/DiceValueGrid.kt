@@ -12,7 +12,7 @@ import com.github.sor2171.dices.data.DiceDataCollection
 
 @Composable
 fun DiceValueGrid(
-    diceRefresh: Boolean
+    key: Boolean
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -21,7 +21,10 @@ fun DiceValueGrid(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier
     ) {
-        items(DiceDataCollection.diceList) { diceType ->
+        items(
+            items = DiceDataCollection.diceList,
+            key = {diceType -> diceType.name + key }
+        ) { diceType ->
             for (value in diceType.diceValue) {
                 DiceValueCard(value, diceType.name)
             }

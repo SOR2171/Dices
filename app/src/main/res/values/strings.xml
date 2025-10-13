@@ -2,4 +2,5 @@
     <string name="app_name">Dices</string>
     <string name="SIButton_name">Statistical information</string>
     <string name="MDButton_name">Manage dice</string>
+    <string name="RFAButton_name" translatable="false">ROLL</string>
 </resources>

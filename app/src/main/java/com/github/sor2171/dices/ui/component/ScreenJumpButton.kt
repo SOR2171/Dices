@@ -12,10 +12,11 @@ import androidx.compose.ui.res.stringResource
 @Composable
 fun ScreenJumpButton(
     modifier: Modifier,
+    jumpScreen: () -> Unit,
     @StringRes textID: Int
 ) {
     Button(
-        onClick = {},
+        onClick = jumpScreen,
         modifier = modifier
     ) {
         Text(

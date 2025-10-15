@@ -29,7 +29,6 @@ import com.github.sor2171.dices.ui.theme.AppTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ManageDiceScreen(
-    diceRefresh: Boolean,
     lazyColumnState: LazyListState,
     changeDiceRefresh: () -> Unit,
     backToMainScreen: () -> Unit
@@ -51,7 +50,7 @@ fun ManageDiceScreen(
                     navigationIcon = {
                         IconButton(
                             onClick = {
-                                changeDiceRefresh
+                                changeDiceRefresh()
                                 backToMainScreen()
                             }
                         ) {
@@ -97,7 +96,6 @@ fun ManageDiceScreen(
 fun ManageDiceScreenPreview() {
     AppTheme(dynamicColor = false) {
         ManageDiceScreen(
-            true,
             rememberLazyListState(),
             {},
             {}

@@ -60,7 +60,6 @@ fun MainFunc() {
 
             composable(ScreenDestination.MD) {
                 ManageDiceScreen(
-                    diceRefresh = diceRefresh,
                     lazyColumnState = diceManagerLazyListState,
                     changeDiceRefresh = changeDiceRefresh,
                     backToMainScreen = { jumpToScreen(ScreenDestination.MS) }

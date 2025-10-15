@@ -59,6 +59,7 @@ fun DiceManagerCard(
                 IconButton(
                     enabled = (!numberError && diceType.diceValue.isNotEmpty()),
                     onClick = {
+                        textFieldValue = (textFieldValue.toInt() - 1).toString()
                         diceType.mountTo(diceType.diceValue.size - 1)
                     }
                 ) {
@@ -87,7 +88,9 @@ fun DiceManagerCard(
                 )
 
                 IconButton(
+                    enabled = (!numberError && diceType.diceValue.isNotEmpty()),
                     onClick = {
+                        textFieldValue = (textFieldValue.toInt() + 1).toString()
                         diceType.mountTo(diceType.diceValue.size + 1)
                     }
                 ) {

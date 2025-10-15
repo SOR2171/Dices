@@ -14,4 +14,23 @@ class DiceType(
             diceValue[i] = Random.nextInt(1..max)
         }
     }
+
+    fun mountTo(mount: Int) {
+        when {
+            mount < diceValue.size -> mountMinusTo(mount)
+            mount > diceValue.size -> mountAddTo(mount)
+        }
+    }
+
+    private fun mountAddTo(mount: Int) {
+        while (mount > diceValue.size) {
+            diceValue += 0
+        }
+    }
+
+    private fun mountMinusTo(mount: Int) {
+        while (mount < diceValue.size) {
+            diceValue.removeAt(diceValue.size - 1)
+        }
+    }
 }

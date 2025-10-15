@@ -1,10 +1,12 @@
 package com.github.sor2171.dices.ui.component
 
+
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -15,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun RollFloatingActionButton(
+fun AddDiceFloatingActionButton(
     extended: Boolean,
     @StringRes textID: Int,
     onClick: () -> Unit
@@ -28,7 +30,7 @@ fun RollFloatingActionButton(
             modifier = Modifier.padding(horizontal = 16.dp)
         ) {
             Icon(
-                imageVector = Icons.Default.PlayArrow,
+                imageVector = Icons.Default.Add,
                 contentDescription = null
             )
             AnimatedVisibility(visible = extended) {

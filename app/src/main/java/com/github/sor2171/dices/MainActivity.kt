@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,9 +32,11 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainFunc() {
     var diceRefresh by remember { mutableStateOf(true) }
-    val lazyGridState = rememberLazyGridState()
+    val mainScreenLazyGridState = rememberLazyGridState()
+    val diceManagerLazyListState = rememberLazyListState()
     val navController = rememberNavController()
 
+    val changeDiceRefresh = { diceRefresh = !diceRefresh }
     val jumpToScreen: (String) -> Unit = { navController.navigate(it) }
 
     AppTheme {
@@ -44,8 +47,8 @@ fun MainFunc() {
             composable(ScreenDestination.MS) {
                 MainScreen(
                     diceRefresh = diceRefresh,
-                    changeDiceRefresh = { diceRefresh = it },
-                    lazyGridState = lazyGridState,
+                    changeDiceRefresh = changeDiceRefresh,
+                    lazyGridState = mainScreenLazyGridState,
                     screenToSI = { jumpToScreen(ScreenDestination.SI) },
                     screenToMD = { jumpToScreen(ScreenDestination.MD) }
                 )
@@ -56,7 +59,12 @@ fun MainFunc() {
             }
 
             composable(ScreenDestination.MD) {
-                ManageDiceScreen()
+                ManageDiceScreen(
+                    diceRefresh = diceRefresh,
+                    lazyColumnState = diceManagerLazyListState,
+                    changeDiceRefresh = changeDiceRefresh,
+                    backToMainScreen = { jumpToScreen(ScreenDestination.MS) }
+                )
             }
         }
     }

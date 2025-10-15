@@ -3,4 +3,9 @@
     <string name="app_name">Dices</string>
     <string name="SIButton_name">统计信息</string>
     <string name="MDButton_name">管理骰子</string>
+    <string name="back_button">返回</string>
+    <string name="minus_button">减少</string>
+    <string name="add_button">增加</string>
+    <string name="delete_button">删除</string>
+    <string name="add_dice_button">添加骰子</string>
 </resources>

@@ -22,22 +22,28 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.sor2171.dices.R
-import com.github.sor2171.dices.data.DiceDataCollection
 import com.github.sor2171.dices.data.DiceType
 
 @Composable
 fun DiceManagerCard(
+    diceDelete: () -> Unit,
     diceType: DiceType
 ) {
     var numberError by remember { mutableStateOf(false) }
     var textFieldValue by remember { mutableStateOf(diceType.diceValue.size.toString()) }
 
-    Surface {
+    Surface(
+        shape = MaterialTheme.shapes.medium,
+        color = MaterialTheme.colorScheme.secondaryContainer,
+        modifier = Modifier
+            .padding(4.dp)
+    ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
@@ -49,12 +55,13 @@ fun DiceManagerCard(
         ) {
             Text(
                 text = diceType.name,
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.titleMedium
             )
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(0.dp))
+                modifier = Modifier.padding(0.dp)
+            )
             {
                 IconButton(
                     enabled = (!numberError && diceType.diceValue.isNotEmpty()),
@@ -82,13 +89,13 @@ fun DiceManagerCard(
                     },
                     isError = numberError,
                     singleLine = true,
-                    textStyle = MaterialTheme.typography.bodySmall,
+                    textStyle = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier
-                        .width(96.dp)
+                        .width(64.dp)
                 )
 
                 IconButton(
-                    enabled = (!numberError && diceType.diceValue.isNotEmpty()),
+                    enabled = !numberError,
                     onClick = {
                         textFieldValue = (textFieldValue.toInt() + 1).toString()
                         diceType.mountTo(diceType.diceValue.size + 1)
@@ -101,13 +108,12 @@ fun DiceManagerCard(
                 }
 
                 IconButton(
-                    onClick = {
-                        DiceDataCollection.deleteType(diceType.max)
-                    }
+                    onClick = diceDelete
                 ) {
                     Icon(
                         imageVector = Icons.Default.Delete,
-                        contentDescription = stringResource(R.string.delete_button)
+                        contentDescription = stringResource(R.string.delete_button),
+                        tint = Color(255, 64, 64)
                     )
                 }
             }
@@ -120,6 +126,7 @@ fun DiceManagerCard(
 @Composable
 fun DiceManagerCardPreview() {
     DiceManagerCard(
+        {},
         DiceType(3)
     )
 }

@@ -1,5 +1,7 @@
 package com.github.sor2171.dices
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,6 +19,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,6 +40,10 @@ fun ManageDiceScreen(
     changeDiceRefresh: () -> Unit,
     backToMainScreen: () -> Unit
 ) {
+    var diceExistRefresh by remember { mutableStateOf(true) }
+    var diceList by remember {
+        mutableStateOf(DiceDataCollection.diceList.toList())
+    }
     Surface(
         tonalElevation = 3.dp,
         modifier = Modifier
@@ -75,13 +86,22 @@ fun ManageDiceScreen(
         ) { paddingValues ->
             LazyColumn(
                 state = lazyColumnState,
+                contentPadding = PaddingValues(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier
                     .padding(paddingValues)
             ) {
                 items(
-                    items = DiceDataCollection.diceList
+                    items = diceList,
+                    key = { diceType -> diceType.toString() + diceExistRefresh }
                 ) { diceType ->
                     DiceManagerCard(
+                        {
+                            DiceDataCollection.deleteType(diceType.max)
+                            diceList = diceList.filter { it != diceType }
+                            diceExistRefresh = !diceExistRefresh
+                        },
                         diceType
                     )
                 }

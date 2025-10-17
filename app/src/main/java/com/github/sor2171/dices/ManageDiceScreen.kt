@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import com.github.sor2171.dices.data.DiceDataCollection
 import com.github.sor2171.dices.ui.component.AddDiceFloatingActionButton
 import com.github.sor2171.dices.ui.component.DiceManagerCard
+import com.github.sor2171.dices.ui.component.DiceTypeCreateDialog
 import com.github.sor2171.dices.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,8 +42,23 @@ fun ManageDiceScreen(
     backToMainScreen: () -> Unit
 ) {
     var diceExistRefresh by remember { mutableStateOf(true) }
-    var diceList by remember {
-        mutableStateOf(DiceDataCollection.diceList.toList())
+    var diceList by remember { mutableStateOf(DiceDataCollection.diceList.toList()) }
+    var openDialog by remember { mutableStateOf(false) }
+
+    if (openDialog) {
+        DiceTypeCreateDialog(
+            onDismissRequest = { openDialog = false },
+            onConfirmation = {
+                openDialog = false
+                diceList = DiceDataCollection.diceList.toList()
+                diceExistRefresh = !diceExistRefresh
+                changeDiceRefresh()
+            },
+            titleStringRes = R.string.add_dice_button,
+            contentStringRes = R.string.add_dice_content,
+            confirmStringRes = R.string.confirm_button,
+            dismissStringRes = R.string.dismiss_button,
+        )
     }
     Surface(
         tonalElevation = 3.dp,
@@ -77,10 +93,7 @@ fun ManageDiceScreen(
                 AddDiceFloatingActionButton(
                     extended = lazyColumnState.isScrollInProgress,
                     textID = R.string.add_dice_button,
-                    onClick = {
-                        /*TODO*/
-                        changeDiceRefresh()
-                    }
+                    onClick = { openDialog = true }
                 )
             }
         ) { paddingValues ->
@@ -121,4 +134,17 @@ fun ManageDiceScreenPreview() {
             {}
         )
     }
+}
+
+@Preview
+@Composable
+fun DiceTypeCreateDialogPreview() {
+    DiceTypeCreateDialog(
+        {},
+        {},
+        R.string.add_dice_button,
+        R.string.add_dice_content,
+        R.string.confirm_button,
+        R.string.dismiss_button
+    )
 }

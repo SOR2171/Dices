@@ -8,4 +8,7 @@
     <string name="add_button">add</string>
     <string name="delete_button">delete</string>
     <string name="add_dice_button">Add dice</string>
+    <string name="dismiss_button">Dismiss</string>
+    <string name="confirm_button">Confirm</string>
+    <string name="add_dice_content">Entry the number of sides on the new dice.</string>
 </resources>

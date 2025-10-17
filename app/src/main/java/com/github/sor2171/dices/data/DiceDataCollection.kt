@@ -23,6 +23,7 @@ object DiceDataCollection {
     }
 
     fun addDiceType(max: Int): Boolean {
+        if (max <= 1) return false
         for (i in diceList.indices) {
             if (diceList[i].max == max)
                 return false

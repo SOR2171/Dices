@@ -3,6 +3,7 @@ package com.github.sor2171.dices.ui.component
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -44,7 +45,14 @@ fun DiceValueCard(
 
             Text(
                 text = "${data.value}",
-                style = MaterialTheme.typography.displayLarge
+                style = when (data.value.toString().length){
+                    in 1..3 -> MaterialTheme.typography.displayLarge
+                    4 -> MaterialTheme.typography.displayMedium
+                    5 -> MaterialTheme.typography.displaySmall
+                    else -> MaterialTheme.typography.bodyMedium
+                },
+                modifier = Modifier
+                    .height(64.dp)
             )
 
             Spacer(modifier = Modifier.size(8.dp))

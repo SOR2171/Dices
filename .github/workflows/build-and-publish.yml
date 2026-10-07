@@ -1,0 +1,135 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build ${{ matrix.target }}
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: android
+
+          - os: macos-latest
+            target: macos
+
+          - os: windows-latest
+            target: windows
+
+          - os: ubuntu-latest
+            target: linux
+
+    steps:
+      # Checkout
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # JDK
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+
+      # Gradle cache
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+
+      # Gradlew permission
+      - run: chmod +x ./gradlew
+
+      # Android SDK
+      - if: matrix.target == 'android'
+        uses: android-actions/setup-android@v3
+
+      # Android
+      - name: Decode Android Keystore
+        if: matrix.target == 'android'
+        run: echo "${{ secrets.ANDROID_KEYSTORE }}" | base64 -d > release.jks
+
+      - name: Build Android Release
+        if: matrix.target == 'android'
+        run: ./gradlew composeApp:assembleRelease --no-daemon
+
+      # macOS
+      - if: matrix.target == 'macos'
+        run: ./gradlew composeApp:packageDmg --no-daemon
+
+      # Windows
+      - if: matrix.target == 'windows'
+        run: ./gradlew composeApp:packageMsi --no-daemon
+
+      # Linux
+      - if: matrix.target == 'linux'
+        run: ./gradlew composeApp:packageDeb --no-daemon
+
+      # Upload artifacts
+      - uses: actions/upload-artifact@v5
+        with:
+          name: ${{ matrix.target }}-artifacts
+
+          path: |
+            composeApp/build/outputs/**/*.apk
+            composeApp/build/outputs/**/*.aab
+
+            composeApp/build/compose/binaries/**
+
+            composeApp/build/dist/**
+            composeApp/build/distributions/**
+
+          if-no-files-found: ignore
+
+  publish:
+    name: Publish
+
+    needs: build
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      # Download artifacts
+      - uses: actions/download-artifact@v5
+        with:
+          path: artifacts
+
+      # GitHub release
+      - uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+
+          files: |
+            artifacts/**/*.apk
+            artifacts/**/*.aab
+
+            artifacts/**/*.dmg
+            artifacts/**/*.msi
+            artifacts/**/*.deb
+
+            artifacts/**/*.zip
+            artifacts/**/*.exe
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}

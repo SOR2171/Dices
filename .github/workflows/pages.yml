@@ -28,13 +28,13 @@ jobs:
 
       - run: chmod +x gradlew
 
-      - run: ./gradlew composeApp:wasmJsBrowserDistribution
+      - run: ./gradlew webApp:wasmJsBrowserDistribution
 
       - uses: actions/configure-pages@v5
 
       - uses: actions/upload-pages-artifact@v5
         with:
-          path: composeApp/build/dist/wasmJs/productionExecutable
+          path: webApp/build/dist/wasmJs/productionExecutable
 
   deploy:
     needs: build

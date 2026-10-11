@@ -66,19 +66,19 @@ jobs:
 
       - name: Build Android Release
         if: matrix.target == 'android'
-        run: ./gradlew composeApp:assembleRelease --no-daemon
+        run: ./gradlew androidApp:assembleRelease --no-daemon
 
       # macOS
       - if: matrix.target == 'macos'
-        run: ./gradlew composeApp:packageDmg --no-daemon
+        run: ./gradlew desktopApp:packageDmg --no-daemon
 
       # Windows
       - if: matrix.target == 'windows'
-        run: ./gradlew composeApp:packageMsi --no-daemon
+        run: ./gradlew desktopApp:packageMsi --no-daemon
 
       # Linux
       - if: matrix.target == 'linux'
-        run: ./gradlew composeApp:packageDeb --no-daemon
+        run: ./gradlew desktopApp:packageDeb --no-daemon
 
       # Upload artifacts
       - uses: actions/upload-artifact@v5
@@ -86,13 +86,13 @@ jobs:
           name: ${{ matrix.target }}-artifacts
 
           path: |
-            composeApp/build/outputs/**/*.apk
-            composeApp/build/outputs/**/*.aab
+            androidApp/build/outputs/**/*.apk
+            androidApp/build/outputs/**/*.aab
 
-            composeApp/build/compose/binaries/**
+            desktopApp/build/compose/binaries/**
 
-            composeApp/build/dist/**
-            composeApp/build/distributions/**
+            desktopApp/build/dist/**
+            desktopApp/build/distributions/**
 
           if-no-files-found: ignore
 

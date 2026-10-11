@@ -1,11 +1,13 @@
 package io.github.sor2171.dices.ui.screens
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.VerticalScrollbar
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -44,14 +46,18 @@ fun MainScreen(
                 .padding(top = paddingValues.calculateTopPadding())
                 .fillMaxHeight()
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+            Box(
+                modifier = Modifier.fillMaxSize()
             ) {
                 DiceValueGrid(
-                    diceRefresh = diceRefresh
+                    diceRefresh = diceRefresh,
+                    lazyGridState = lazyGridState,
+                )
+                VerticalScrollbar(
+                    adapter = rememberScrollbarAdapter(lazyGridState),
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .fillMaxHeight()
                 )
             }
         }

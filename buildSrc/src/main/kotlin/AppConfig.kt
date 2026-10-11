@@ -1,4 +1,4 @@
-@Suppress("ConstPropertyName")
+@Suppress("ConstPropertyName", "unused")
 object AppConfig {
     const val appVersion = "1.0.0"
     const val appName = "Dices"

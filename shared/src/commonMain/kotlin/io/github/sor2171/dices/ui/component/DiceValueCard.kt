@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.github.sor2171.dices.data.DiceData
+import io.github.sor2171.dices.core.entity.DiceData
 
 @Composable
 fun DiceValueCard(

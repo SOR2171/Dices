@@ -1,5 +1,6 @@
-package io.github.sor2171.dices.data
+package io.github.sor2171.dices.core.utils
 
+import io.github.sor2171.dices.core.entity.DiceType
 import kotlin.collections.plusAssign
 
 object DiceDataCollection {

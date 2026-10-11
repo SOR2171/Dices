@@ -2,6 +2,7 @@ package io.github.sor2171.dices
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Icon
@@ -14,7 +15,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import io.github.sor2171.dices.data.ScreenDestination
+import androidx.compose.ui.unit.dp
+import io.github.sor2171.dices.core.entity.Screens
 import io.github.sor2171.dices.ui.screens.MainScreen
 import io.github.sor2171.dices.ui.screens.ManageDiceScreen
 import io.github.sor2171.dices.ui.screens.StatisticalInformationScreen
@@ -22,7 +24,7 @@ import io.github.sor2171.dices.ui.screens.StatisticalInformationScreen
 @Composable
 fun App() {
     var diceRefresh by remember { mutableStateOf(true) }
-    var currentDestination by remember { mutableStateOf(ScreenDestination.Home) }
+    var currentDestination by remember { mutableStateOf(Screens.Home) }
     val mainScreenLazyGridState = rememberLazyGridState()
     val diceManagerLazyListState = rememberLazyListState()
 
@@ -31,15 +33,16 @@ fun App() {
     MaterialTheme {
         NavigationSuiteScaffold(
             navigationSuiteItems = {
-                ScreenDestination.entries.forEach { destination ->
+                Screens.entries.forEach { destination ->
                     item(
+                        modifier = Modifier.padding(vertical = 8.dp),
                         icon = {
                             Icon(
                                 imageVector = destination.icon,
-                                contentDescription = destination.label
+                                contentDescription = destination.label()
                             )
                         },
-                        label = { Text(destination.label) },
+                        label = { Text(destination.label()) },
                         selected = destination == currentDestination,
                         onClick = { currentDestination = destination }
                     )
@@ -51,20 +54,17 @@ fun App() {
                     .fillMaxSize()
             ) {
                 when (currentDestination) {
-                    ScreenDestination.Home -> MainScreen(
+                    Screens.Home -> MainScreen(
                         diceRefresh = diceRefresh,
                         changeDiceRefresh = changeDiceRefresh,
                         lazyGridState = mainScreenLazyGridState,
-                        screenToSI = { currentDestination = ScreenDestination.Information },
-                        screenToMD = { currentDestination = ScreenDestination.Manage }
                     )
 
-                    ScreenDestination.Information -> StatisticalInformationScreen()
+                    Screens.Information -> StatisticalInformationScreen()
 
-                    ScreenDestination.Manage -> ManageDiceScreen(
+                    Screens.Manage -> ManageDiceScreen(
                         lazyColumnState = diceManagerLazyListState,
                         changeDiceRefresh = changeDiceRefresh,
-                        backToMainScreen = { currentDestination = ScreenDestination.Home }
                     )
                 }
             }

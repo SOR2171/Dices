@@ -8,15 +8,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,24 +20,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dices.shared.generated.resources.MDButton_name
 import dices.shared.generated.resources.Res
 import dices.shared.generated.resources.add_dice_button
 import dices.shared.generated.resources.add_dice_content
-import dices.shared.generated.resources.back_button
 import dices.shared.generated.resources.confirm_button
 import dices.shared.generated.resources.dismiss_button
-import io.github.sor2171.dices.data.DiceDataCollection
+import io.github.sor2171.dices.core.utils.DiceDataCollection
 import io.github.sor2171.dices.ui.component.AddDiceFloatingActionButton
 import io.github.sor2171.dices.ui.component.DiceManagerCard
 import io.github.sor2171.dices.ui.component.DiceTypeCreateDialog
-import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ManageDiceScreen(
     lazyColumnState: LazyListState,
     changeDiceRefresh: () -> Unit,
-    backToMainScreen: () -> Unit
 ) {
     var diceExistRefresh by remember { mutableStateOf(true) }
     var diceList by remember { mutableStateOf(DiceDataCollection.diceList.toList()) }
@@ -70,29 +60,6 @@ fun ManageDiceScreen(
             .fillMaxHeight()
     ) {
         Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = stringResource(Res.string.MDButton_name),
-                            style = MaterialTheme.typography.titleLarge
-                        )
-                    },
-                    navigationIcon = {
-                        IconButton(
-                            onClick = {
-                                changeDiceRefresh()
-                                backToMainScreen()
-                            }
-                        ) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                                contentDescription = stringResource(Res.string.back_button)
-                            )
-                        }
-                    }
-                )
-            },
             floatingActionButton = {
                 AddDiceFloatingActionButton(
                     extended = lazyColumnState.isScrollInProgress,
@@ -123,7 +90,6 @@ fun ManageDiceScreen(
                     )
                 }
             }
-
         }
     }
 }
@@ -134,9 +100,7 @@ fun ManageDiceScreenPreview() {
     MaterialTheme {
         ManageDiceScreen(
             rememberLazyListState(),
-            {},
-            {}
-        )
+        ) {}
     }
 }
 

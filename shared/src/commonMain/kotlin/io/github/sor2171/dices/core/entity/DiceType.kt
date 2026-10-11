@@ -1,4 +1,4 @@
-package io.github.sor2171.dices.data
+package io.github.sor2171.dices.core.entity
 
 import kotlin.random.Random
 import kotlin.random.nextInt

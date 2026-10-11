@@ -29,7 +29,7 @@ import dices.shared.generated.resources.Res
 import dices.shared.generated.resources.baseline_remove_24
 import dices.shared.generated.resources.delete_button
 import dices.shared.generated.resources.minus_button
-import io.github.sor2171.dices.data.DiceType
+import io.github.sor2171.dices.core.entity.DiceType
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 

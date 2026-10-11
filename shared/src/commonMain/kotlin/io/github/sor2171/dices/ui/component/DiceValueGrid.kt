@@ -9,8 +9,8 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import io.github.sor2171.dices.data.DiceData
-import io.github.sor2171.dices.data.DiceDataCollection
+import io.github.sor2171.dices.core.entity.DiceData
+import io.github.sor2171.dices.core.utils.DiceDataCollection
 
 @Composable
 fun DiceValueGrid(

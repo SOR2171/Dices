@@ -2,6 +2,7 @@ package io.github.sor2171.dices.ui.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -56,16 +57,19 @@ fun DiceManagerCard(
                 .height(48.dp)
                 .fillMaxWidth()
         ) {
-            Text(
-                text = diceType.name,
-                style = MaterialTheme.typography.titleMedium
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Spacer(Modifier.fillMaxWidth(0.1f))
+                Text(
+                    text = diceType.name,
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(0.dp)
-            )
-            {
+            ) {
                 IconButton(
                     enabled = (!numberError && diceType.diceValue.isNotEmpty()),
                     onClick = {
@@ -119,6 +123,7 @@ fun DiceManagerCard(
                         tint = Color(255, 64, 64)
                     )
                 }
+                Spacer(Modifier.fillMaxWidth(0.1f))
             }
         }
     }

@@ -4,9 +4,12 @@
 ![Linux](https://img.shields.io/badge/Linux-FCC624?style=&logo=linux&logoColor=black)
 ![Win](https://img.shields.io/badge/Windows-10/11-2376bc?style=flat&logo=windows&logoColor=ffffff)
 ![macOS](https://img.shields.io/badge/MacOS-333?style=flat&logo=apple&logoColor=ffffff)
+![Web](https://img.shields.io/badge/Web-Wasm-654FF0?style=flat&logo=webassembly&logoColor=white)
 
-![License](https://img.shields.io/github/license/sor2171/Super_Frame_Vision.svg)
+![License](https://img.shields.io/github/license/sor2171/Dices.svg)
 ![KMP](https://img.shields.io/badge/Kotlin_Multiplatform-7F52FF?style=flat&logo=kotlin&logoColor=white)
+
+> **WASM**: [https://sor2171.github.io/Dices/](https://sor2171.github.io/Dices/)
 
 ## 小剧场
 

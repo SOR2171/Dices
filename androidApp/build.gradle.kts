@@ -26,7 +26,7 @@ android {
     defaultConfig {
         applicationId = AppConfig.packageName
         minSdk = libs.versions.android.minSdk.get().toInt()
-        versionCode = 1
+        versionCode = AppConfig.versionCode
         versionName = AppConfig.appVersion
     }
     packaging {

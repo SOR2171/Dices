@@ -19,6 +19,8 @@ compose.desktop {
     application {
         mainClass = "io.github.sor2171.dices.MainKt"
 
+        jvmArgs += listOf("--enable-native-access=ALL-UNNAMED")
+
         nativeDistributions {
             targetFormats(
                 TargetFormat.Msi,    // Windows
@@ -33,4 +35,8 @@ compose.desktop {
             description = AppConfig.appName
         }
     }
+}
+
+tasks.withType<JavaExec>().configureEach {
+    jvmArgs("--enable-native-access=ALL-UNNAMED")
 }

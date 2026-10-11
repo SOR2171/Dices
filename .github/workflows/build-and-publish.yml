@@ -55,9 +55,7 @@ jobs:
       # Gradlew permission
       - run: chmod +x ./gradlew
 
-      # Android SDK
-      - if: matrix.target == 'android'
-        uses: android-actions/setup-android@v3
+      # Android SDK is pre-installed on ubuntu-latest runner, no setup-android action needed
 
       # Android
       - name: Decode Android Keystore

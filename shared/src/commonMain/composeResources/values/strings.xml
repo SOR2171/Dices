@@ -13,4 +13,14 @@
     <string name="dismiss_button">Dismiss</string>
     <string name="confirm_button">Confirm</string>
     <string name="add_dice_content">Entry the number of sides on the new dice.</string>
+
+    <string name="statistics_overview_title">Overview</string>
+    <string name="statistics_type_count_label">Dice types</string>
+    <string name="statistics_dice_count_label">Dice count</string>
+    <string name="statistics_sum_label">Sum</string>
+    <string name="statistics_average_label">Average</string>
+    <string name="statistics_max_label">Max</string>
+    <string name="statistics_min_label">Min</string>
+    <string name="statistics_values_label">Values</string>
+    <string name="statistics_empty">No dice yet</string>
 </resources>

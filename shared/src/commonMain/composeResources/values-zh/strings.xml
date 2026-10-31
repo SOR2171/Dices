@@ -13,4 +13,14 @@
     <string name="dismiss_button">取消</string>
     <string name="confirm_button">确认</string>
     <string name="add_dice_content">输入骰子的面数</string>
+
+    <string name="statistics_overview_title">总览</string>
+    <string name="statistics_type_count_label">骰子种类</string>
+    <string name="statistics_dice_count_label">骰子数量</string>
+    <string name="statistics_sum_label">总和</string>
+    <string name="statistics_average_label">平均值</string>
+    <string name="statistics_max_label">最大值</string>
+    <string name="statistics_min_label">最小值</string>
+    <string name="statistics_values_label">当前点数</string>
+    <string name="statistics_empty">暂无骰子</string>
 </resources>

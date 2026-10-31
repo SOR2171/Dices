@@ -13,6 +13,7 @@ dependencies {
     implementation(libs.kotlinx.coroutinesSwing)
 
     implementation(libs.compose.uiToolingPreview)
+    testImplementation(kotlin("test"))
 }
 
 compose.desktop {
@@ -39,4 +40,16 @@ compose.desktop {
 
 tasks.withType<JavaExec>().configureEach {
     jvmArgs("--enable-native-access=ALL-UNNAMED")
+}
+
+// 开发用：把界面离屏渲染成 PNG（gradlew :desktopApp:renderPreview -Pout=xxx.png）
+tasks.register<JavaExec>("renderPreview") {
+    dependsOn("classes")
+    mainClass.set("io.github.sor2171.dices.dev.PreviewRenderKt")
+    classpath = sourceSets["main"].runtimeClasspath
+    args = listOf(
+        providers.gradleProperty("out").getOrElse("preview.png"),
+        "1120",
+        "820",
+    )
 }

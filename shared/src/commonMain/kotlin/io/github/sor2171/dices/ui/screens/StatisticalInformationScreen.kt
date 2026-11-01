@@ -127,5 +127,27 @@ val testHistory = listOf(
             DiceData(id = 3, diceType = "D24", value = 2),
             DiceData(id = 4, diceType = "D29", value = 5)
         )
-    )
+    ),
+    TestRecord(
+        id = "第 3 次掷骰",
+        total = 28,
+        dices = listOf(
+            DiceData(id = 1, diceType = "D21", value = 20),
+            DiceData(id = 2, diceType = "D2", value = 1),
+            DiceData(id = 3, diceType = "D24", value = 2),
+            DiceData(id = 4, diceType = "D29", value = 5)
+        )
+    ),
+    TestRecord(
+        id = "第 4 次掷骰",
+        total = 28,
+        dices = listOf(
+            DiceData(id = 1, diceType = "D21", value = 20),
+            DiceData(id = 2, diceType = "D2", value = 1),
+            DiceData(id = 3, diceType = "D24", value = 2),
+            DiceData(id = 4, diceType = "D29", value = 5)
+        )
+    ),
+
+
 )

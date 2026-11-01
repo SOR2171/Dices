@@ -54,6 +54,8 @@ fun HistoryCard(record: TestRecord) {
         shape = RoundedCornerShape(12.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
+            val expressionText =expression(record.dices)
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -65,7 +67,7 @@ fun HistoryCard(record: TestRecord) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
-                    text = "总和: ${record.total}",
+                    text = "总和: $expressionText=${record.total}",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary
@@ -89,16 +91,24 @@ fun HistoryCard(record: TestRecord) {
             }
         }
     }
-}data class TestRecord(
+}
+data class TestRecord(
     val id: String,
-    val total: Int,
     val dices: List<DiceData>
-)
-
+) {
+    val total: Int
+        get() = dices.sumOf { it.value }
+}
+fun expression(dices: List<DiceData>): String {
+    val counts = dices.groupBy { it.diceType }
+    val parts = counts.map { (type, list) ->
+        "${list.size}$type"
+    }
+    return parts.joinToString("+")
+}
 val testHistory = listOf(
     TestRecord(
         id = "第 1 次掷骰",
-        total = 75,
         dices = listOf(
             DiceData(id = 1, diceType = "D6", value = 6),
             DiceData(id = 2, diceType = "D6", value = 4),
@@ -120,7 +130,6 @@ val testHistory = listOf(
     ),
     TestRecord(
         id = "第 2 次掷骰",
-        total = 28,
         dices = listOf(
             DiceData(id = 1, diceType = "D21", value = 20),
             DiceData(id = 2, diceType = "D2", value = 1),
@@ -130,7 +139,6 @@ val testHistory = listOf(
     ),
     TestRecord(
         id = "第 3 次掷骰",
-        total = 28,
         dices = listOf(
             DiceData(id = 1, diceType = "D21", value = 20),
             DiceData(id = 2, diceType = "D2", value = 1),
@@ -140,7 +148,6 @@ val testHistory = listOf(
     ),
     TestRecord(
         id = "第 4 次掷骰",
-        total = 28,
         dices = listOf(
             DiceData(id = 1, diceType = "D21", value = 20),
             DiceData(id = 2, diceType = "D2", value = 1),

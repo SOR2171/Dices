@@ -30,9 +30,11 @@ fun DiceValueGrid(
     ) {
         items(
             items = DiceDataCollection.diceDataList,
-            key = { data -> data.toString() + diceRefresh }
+            key = { data -> "${data.diceType}-${data.id}" },
         ) { data ->
-            DiceValueCard(data)
+            DiceValueCard(
+                data = data,
+                rollToken = diceRefresh,
         }
     }
 }

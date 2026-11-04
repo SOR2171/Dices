@@ -17,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.github.sor2171.dices.core.entity.Screens
+import io.github.sor2171.dices.ui.DiceApp
 import io.github.sor2171.dices.ui.screens.MainScreen
 import io.github.sor2171.dices.ui.screens.ManageDiceScreen
 import io.github.sor2171.dices.ui.screens.StatisticalInformationScreen
@@ -60,12 +61,14 @@ fun App() {
                         lazyGridState = mainScreenLazyGridState,
                     )
 
-                    Screens.Information -> StatisticalInformationScreen()
+                    Screens.Information -> StatisticalInformationScreen(diceRefresh = diceRefresh)
 
                     Screens.Manage -> ManageDiceScreen(
                         lazyColumnState = diceManagerLazyListState,
                         changeDiceRefresh = changeDiceRefresh,
                     )
+
+                    Screens.Dice -> DiceApp()
                 }
             }
         }

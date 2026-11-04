@@ -33,6 +33,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -65,12 +66,13 @@ import androidx.compose.ui.unit.sp
 import io.github.sor2171.dices.core.RollParser
 import io.github.sor2171.dices.core.RollResult
 import io.github.sor2171.dices.core.Roller
+import dices.shared.generated.resources.Res
+import dices.shared.generated.resources.wallpaper
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.io.File
+import org.jetbrains.compose.resources.decodeToImageBitmap
+import org.jetbrains.compose.resources.imageResource
 
 private val AccentCyan = Color(0xFF7BE7F5)
 private val AccentPink = Color(0xFFFF84C8)
@@ -124,6 +126,7 @@ class DiceUiState(initialWallpaper: ImageBitmap? = null, initialName: String = "
     var error by mutableStateOf<String?>(null)
     var rolling by mutableStateOf(false)
     var showHelp by mutableStateOf(false)
+    var defaultWallpaper by mutableStateOf(initialWallpaper)
     var wallpaper by mutableStateOf(initialWallpaper)
     var wallpaperName by mutableStateOf(initialName)
     var lastExpression by mutableStateOf<String?>(null)
@@ -181,34 +184,25 @@ class DiceController(
             argument.isEmpty() || argument == "pick" || argument == "换" ->
                 scope.launch { pickBackground() }
 
-            argument == "reset" || argument == "default" || argument == "默认" -> {
-                val builtIn = WallpaperStore.loadBuiltIn()
-                if (builtIn == null) {
-                    state.error = "内置壁纸也找不到了……"
-                } else {
-                    state.wallpaper = builtIn
-                    state.wallpaperName = "默认壁纸"
-                    state.error = null
-                    state.input = ""
-                }
-            }
+            argument == "reset" || argument == "default" || argument == "默认" ->
+                scope.launch { resetBackground() }
 
-            else -> {
-                val file = File(argument.trim('"', '\'', ' '))
-                scope.launch {
-                    val bitmap = withContext(Dispatchers.IO) { WallpaperStore.load(file) }
-                    if (bitmap == null) {
-                        state.error = "这张图读不出来：${file.name}"
-                    } else {
-                        state.wallpaper = bitmap
-                        state.wallpaperName = file.name
-                        state.error = null
-                        state.input = ""
-                        WallpaperStore.savePath(file)
-                    }
-                }
-            }
+            else -> state.error = "这个平台不支持直接写路径，用 /bg 挑一张图吧"
         }
+    }
+
+    /** 恢复成打包在 shared 里的默认壁纸 */
+    private suspend fun resetBackground() {
+        val builtIn = state.defaultWallpaper
+        if (builtIn == null) {
+            state.error = "内置壁纸也找不到了……"
+            return
+        }
+        runCatching { clearSavedWallpaper() }
+        state.wallpaper = builtIn
+        state.wallpaperName = "默认壁纸"
+        state.error = null
+        state.input = ""
     }
 
     fun toggleHelp() {
@@ -247,17 +241,21 @@ class DiceController(
     }
 
     private suspend fun pickBackground() {
-        val file = WallpaperStore.chooseImage() ?: return
-        val bitmap = withContext(Dispatchers.IO) { WallpaperStore.load(file) }
+        if (!isWallpaperPickSupported()) {
+            state.error = "当前平台不支持挑本地图片，默认壁纸先用着"
+            return
+        }
+        val bytes = runCatching { pickWallpaperBytes() }.getOrNull() ?: return
+        val bitmap = runCatching { bytes.decodeToImageBitmap() }.getOrNull()
         if (bitmap == null) {
-            state.error = "这张图读不出来：${file.name}"
+            state.error = "这张图读不出来，换一张试试"
             return
         }
         state.wallpaper = bitmap
-        state.wallpaperName = file.name
+        state.wallpaperName = "自定义壁纸"
         state.input = ""
         state.error = null
-        WallpaperStore.savePath(file)
+        saveWallpaperBytes(bytes)
     }
 }
 
@@ -273,13 +271,16 @@ fun DiceAppContent(state: DiceUiState) {
     val controller = remember(state) { DiceController(state, scope) }
     var rootSize by remember { mutableStateOf(Size.Zero) }
 
+    // 打包在 shared 资源里的默认壁纸，三端都拿得到
+    val builtInWallpaper = imageResource(Res.drawable.wallpaper)
+    SideEffect { state.defaultWallpaper = builtInWallpaper }
+
     LaunchedEffect(Unit) {
         if (state.wallpaper == null) {
-            val loaded = withContext(Dispatchers.IO) { WallpaperStore.initial() }
-            if (loaded != null) {
-                state.wallpaper = loaded.first
-                state.wallpaperName = loaded.second
-            }
+            val saved = runCatching { loadSavedWallpaperBytes() }.getOrNull()
+            val bitmap = saved?.let { runCatching { it.decodeToImageBitmap() }.getOrNull() }
+            state.wallpaper = bitmap ?: builtInWallpaper
+            state.wallpaperName = if (bitmap != null) "自定义壁纸" else "默认壁纸"
         }
     }
 
@@ -853,7 +854,6 @@ private fun HelpOverlay(onDismiss: () -> Unit) {
                 HelpLine("2d6 + 1d8 + 3", "任意组合，最后全部相加")
                 HelpLine("d6 x5", "连投 5 次，每次单独出结果")
                 HelpLine("/bg", "挑一张自己的图片当背景")
-                HelpLine("/bg 路径", "也可以直接指定图片文件")
                 HelpLine("/bg reset", "恢复默认背景")
                 HelpLine("/clear", "清空记录")
                 HelpLine("?", "打开 / 收起这份说明")

@@ -2,7 +2,9 @@ package io.github.sor2171.dices.core.utils
 
 import io.github.sor2171.dices.core.entity.DiceData
 import io.github.sor2171.dices.core.entity.DiceType
+import io.github.sor2171.dices.core.entity.DiceRollRecord
 import kotlin.collections.plusAssign
+import androidx.compose.runtime.mutableStateListOf
 
 object DiceDataCollection {
     val diceList = mutableListOf(
@@ -52,5 +54,21 @@ object DiceDataCollection {
             diceType.max
         }
         return true
+    }
+
+    val rollHistory: List<DiceRollRecord>
+        field = mutableStateListOf<DiceRollRecord>()
+
+    fun addRollRecord(currentDiceList: List<DiceData>) {
+        if (currentDiceList.isEmpty()) return
+        val snapshot = currentDiceList.map {
+            DiceData(
+                id = it.id,
+                diceType = it.diceType,
+                value = it.value
+            )
+        }
+        val sum = snapshot.sumOf { it.value }
+        rollHistory.add(DiceRollRecord(diceResults = snapshot, totalSum = sum))
     }
 }

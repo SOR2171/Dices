@@ -36,6 +36,7 @@ fun MainScreen(
                 onClick = {
                     changeDiceRefresh()
                     DiceDataCollection.rollAll()
+                    DiceDataCollection.addRollRecord(DiceDataCollection.diceDataList)
                 }
             )
         }

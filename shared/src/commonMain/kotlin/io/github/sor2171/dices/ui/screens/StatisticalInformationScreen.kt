@@ -1,11 +1,9 @@
 package io.github.sor2171.dices.ui.screens
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -15,90 +13,70 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.sor2171.dices.core.entity.DiceData
+import io.github.sor2171.dices.core.utils.DiceDataCollection
+import io.github.sor2171.dices.core.entity.DiceRollRecord
 import io.github.sor2171.dices.ui.component.DiceValueCard
-
 
 @Composable
 fun StatisticalInformationScreen() {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(16.dp)
+        modifier = Modifier.fillMaxSize().padding(16.dp)
     ) {
-        Text(
-            text = "历史掷骰记录",
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
-
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            items(testHistory) { record ->
-                HistoryCard(record)
+        val history = DiceDataCollection.rollHistory
+        if (history.isEmpty()) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text("暂无记录", color = MaterialTheme.colorScheme.outline)
+            }
+        } else {
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                items(history.reversed()) { record ->
+                    RollRecordCard(record)
+                }
             }
         }
     }
 }
 
 @Composable
-fun HistoryCard(record: TestRecord) {
+fun RollRecordCard(record: DiceRollRecord) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
-        ),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
         shape = RoundedCornerShape(12.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            val expressionText =expression(record.dices)
-
+            val expressionText =expression(record.diceResults)
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = record.id,
-                    fontSize = 16.sp,
+                    text = "掷骰结果 (${record.diceResults.size} 个骰子)",
+                    style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
-                    text = "总和: $expressionText=${record.total}",
+                    text = "总和: $expressionText=${record.totalSum}",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary
                 )
             }
-            HorizontalDivider(
-                modifier = Modifier.padding(vertical = 12.dp),
-                color = MaterialTheme.colorScheme.outlineVariant
-            )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState()),
+            Spacer(modifier = Modifier.height(12.dp))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            Spacer(modifier = Modifier.height(12.dp))
+            LazyRow(
+                contentPadding = PaddingValues(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                for (dice in record.dices) {
-                    Box(modifier = Modifier.width(100.dp)) {
-                        DiceValueCard(data = dice)
+                items(record.diceResults) { dice ->
+                    DiceValueCard(data = dice)
+                }
                     }
                 }
             }
         }
-    }
-}
-data class TestRecord(
-    val id: String,
-    val dices: List<DiceData>
-) {
-    val total: Int
-        get() = dices.sumOf { it.value }
-}
 fun expression(dices: List<DiceData>): String {
     val counts = dices.groupBy { it.diceType }
     val parts = counts.map { (type, list) ->
@@ -106,55 +84,3 @@ fun expression(dices: List<DiceData>): String {
     }
     return parts.joinToString("+")
 }
-val testHistory = listOf(
-    TestRecord(
-        id = "第 1 次掷骰",
-        dices = listOf(
-            DiceData(id = 1, diceType = "D6", value = 6),
-            DiceData(id = 2, diceType = "D6", value = 4),
-            DiceData(id = 3, diceType = "D6", value = 5),
-            DiceData(id = 4, diceType = "D6", value = 5),
-            DiceData(id = 5, diceType = "D6", value = 5),
-            DiceData(id = 6, diceType = "D6", value = 5),
-            DiceData(id = 7, diceType = "D6", value = 5),
-            DiceData(id = 8, diceType = "D6", value = 5),
-            DiceData(id = 9, diceType = "D6", value = 5),
-            DiceData(id = 10, diceType = "D6", value = 5),
-            DiceData(id = 11, diceType = "D6", value = 5),
-            DiceData(id = 12, diceType = "D6", value = 5),
-            DiceData(id = 13, diceType = "D6", value = 5),
-            DiceData(id = 14, diceType = "D6", value = 5),
-            DiceData(id = 15, diceType = "D6", value = 5),
-
-        )
-    ),
-    TestRecord(
-        id = "第 2 次掷骰",
-        dices = listOf(
-            DiceData(id = 1, diceType = "D21", value = 20),
-            DiceData(id = 2, diceType = "D2", value = 1),
-            DiceData(id = 3, diceType = "D24", value = 2),
-            DiceData(id = 4, diceType = "D29", value = 5)
-        )
-    ),
-    TestRecord(
-        id = "第 3 次掷骰",
-        dices = listOf(
-            DiceData(id = 1, diceType = "D21", value = 20),
-            DiceData(id = 2, diceType = "D2", value = 1),
-            DiceData(id = 3, diceType = "D24", value = 2),
-            DiceData(id = 4, diceType = "D29", value = 5)
-        )
-    ),
-    TestRecord(
-        id = "第 4 次掷骰",
-        dices = listOf(
-            DiceData(id = 1, diceType = "D21", value = 20),
-            DiceData(id = 2, diceType = "D2", value = 1),
-            DiceData(id = 3, diceType = "D24", value = 2),
-            DiceData(id = 4, diceType = "D29", value = 5)
-        )
-    ),
-
-
-)

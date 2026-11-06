@@ -1,32 +1,59 @@
 # Dices
 
-![Android](https://img.shields.io/badge/Android-3DDC84?style=flat&logo=android&logoColor=white)
-![Linux](https://img.shields.io/badge/Linux-FCC624?style=&logo=linux&logoColor=black)
-![Win](https://img.shields.io/badge/Windows-10/11-2376bc?style=flat&logo=windows&logoColor=ffffff)
-![macOS](https://img.shields.io/badge/MacOS-333?style=flat&logo=apple&logoColor=ffffff)
-![Web](https://img.shields.io/badge/Web-Wasm-654FF0?style=flat&logo=webassembly&logoColor=white)
+基于 Kotlin Multiplatform 与 Compose 的掷骰子应用。
 
-![License](https://img.shields.io/github/license/sor2171/Dices.svg)
-![KMP](https://img.shields.io/badge/Kotlin_Multiplatform-7F52FF?style=flat&logo=kotlin&logoColor=white)
-
-> **WASM**: [https://sor2171.github.io/Dices/](https://sor2171.github.io/Dices/)
-
-## 小剧场
-
-有一个小伙，叫 qaz，他很喜欢跑团。
-
-有一天他突然意识到一个问题：为什么市面上没有一个好看的，本地的，想怎么掷骰子都行的应用呢？要么是用网站，要么界面粗糙难看。
-
-“哎呀，这样下去是没有好结果的，我必须立刻出手。”
+![Dices](docs/images/Dices.png)
 
 ## 功能
 
-- 可以 roll D6 任意次
+- 混合投掷，可同时使用不同面数的骰子，默认组合为 2D6 + 1D20。
+- 半透明玻璃面板、轻微背景柔化与高光边缘，完整适配背景图片。
+- 骰子旋转与点数跳动，落定后显示每颗结果及总和。
+- 骰组配置，支持常用面数、数量调整与自定义 2–1000 面骰子。
+- 最近 50 次投掷记录，包括各颗点数、平均总点数与最高总点数。
+- 宽窄窗口布局适配，窄窗口保留固定投掷按钮。
 
-- 可以 roll D4，D6，D8，D12（或者更多）任意切换
+配置和历史仅在当前会话保留。每种骰子最多 20 颗，总数最多 60 颗。不同骰组的总点数范围不同，历史统计直接根据保留记录计算。
 
-- 可以 roll n D6（指同时掷出 n 个六面骰并将点数加和）
+## Windows 运行
 
-- 可以 roll n D m（指同时掷出 n 个 m 面骰并将点数加和）
+在全英文路径中打开项目，使用可运行 Gradle 的 JDK，执行下面的命令。
 
-- 可以 roll $n_1$ D $m_1$ , $n_2$ D $m_2$ ...... 任意组合，最后点数取和
+```powershell
+.\gradlew.bat :desktopApp:run
+```
+
+已安装 Android Studio 的 Windows 环境也可运行根目录的 Run-Dices.cmd，它会优先使用 Android Studio 自带的 Java。
+
+应用与打包名称均为 Dices。构建便携应用目录时执行下面的命令。
+
+```powershell
+.\gradlew.bat :desktopApp:createDistributable --no-configuration-cache
+```
+
+Windows 打包工具的下载任务需要关闭配置缓存。输出位于 desktopApp/build/compose/binaries/main/app/Dices，其中包含 Dices.exe、app 与 runtime。
+
+## 验证
+
+```powershell
+.\gradlew.bat :desktopApp:compileKotlin :shared:jvmTest
+```
+
+公共逻辑包含 11 项测试，覆盖配置边界、结果范围、历史快照、重复点击与中断恢复。Windows 桌面编译、便携包启动和 Compose 语义交互已验证。Android 与 Web 入口保留，当前尚未完成构建及运行验证。
+
+## 代码结构
+
+公共代码位于 shared/src/commonMain/kotlin/io/github/sor2171/dices。
+
+- App.kt 管理摄影背景、导航和投掷协程。
+- core/DiceSession.kt 管理当前骰组、投掷结果和历史快照。
+- ui/component/GlassSurface.kt 对齐背景坐标并绘制半透明玻璃面板。
+- ui/component/TableComponents.kt 绘制骰子明暗面与桌面边饰。
+- ui/screens 包含投掷、骰组配置和记录页面。
+- ui/theme/DicesTheme.kt 定义深绿、黄铜与象牙色主题。
+
+背景与图标随应用资源本地打包。
+
+## 许可
+
+MIT，见 LICENSE。

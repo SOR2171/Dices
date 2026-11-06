@@ -4,4 +4,14 @@ html, body {
     margin: 0;
     padding: 0;
     overflow: hidden;
+    background: #0b1512;
+}
+#loading {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: #cba36b;
+    font-family: system-ui, sans-serif;
+    pointer-events: none;
 }

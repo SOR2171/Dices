@@ -30,9 +30,12 @@ compose.desktop {
                 TargetFormat.Deb,    // Linux
                 TargetFormat.Rpm     // Linux
             )
-            packageName = AppConfig.packageName
+            packageName = AppConfig.appName
             packageVersion = AppConfig.appVersion
             description = AppConfig.appName
+            windows {
+                iconFile.set(project.file("src/main/resources/dices.ico"))
+            }
         }
     }
 }

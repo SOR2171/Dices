@@ -3,6 +3,7 @@
     <string name="home_screen_name">Home</string>
     <string name="SIButton_name">information</string>
     <string name="MDButton_name">Manage dice</string>
+    <string name="dice_screen_name">Dice</string>
 
     <string name="RFAButton_name" translatable="false">ROLL</string>
     <string name="back_button">Back</string>

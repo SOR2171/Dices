@@ -1,6 +1,7 @@
 package io.github.sor2171.dices.core.entity
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Casino
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
@@ -8,6 +9,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import dices.shared.generated.resources.MDButton_name
 import dices.shared.generated.resources.Res
 import dices.shared.generated.resources.SIButton_name
+import dices.shared.generated.resources.dice_screen_name
 import dices.shared.generated.resources.home_screen_name
 import org.jetbrains.compose.resources.StringResource
 
@@ -26,5 +28,9 @@ enum class Screens(
     Manage(
         label = Res.string.MDButton_name,
         icon = Icons.Default.Settings
+    ),
+    Dice(
+        label = Res.string.dice_screen_name,
+        icon = Icons.Default.Casino
     )
 }
